@@ -1,0 +1,53 @@
+百度 360已用
+oneRequest方法
+一、首次没有cookie，从服务器全量请求，返回版本号
+版本号存到本地cookie，css和js代码存localstorage
+二、再次访问的时候，cookie中的版本号会随着网站发到服务器，然后服务器再返回一个版本号，如果后台更新过的数据库，那么返回一个的新的版本号，覆盖本地cookie的版本号，localstorage也会同时更新改变过的代码。
+三、再次访问的时候，服务器又会返回一个版本号，如果与本地cookie中的版本号一致，那么css，js代码就直接从本地存储中直接读取，提升页面速度
+
+
+H5移动端性能优化
+加载优化、脚本执行优化、渲染优化、css优化
+
+加载优化
+	减少http请求数
+	压缩js，css，html静态资源并在服务器设置gzip
+	首屏加载，不超过120k大小
+	压缩图片
+	避免重定向
+	异步加载第三方资源（async、动态创建script、defer）
+	oneRequest（首次内联css，js存在localstorage，第二次读js）
+	按需加载（滚动加载、点击加载）
+
+脚本执行优化
+	避免iframe，img等src为空
+	图片尽量避免使用dataURL
+	避免重设图片的大小
+	点击事件优化
+	注意sroll，resize时间绑定时机
+
+渲染优化
+	动画优化
+		使用css3动画
+		使用requestAnimationFrame动画代替setTimeout
+	高频事件优化
+		touch事件
+		scroll事件
+	图片优化
+		压缩图片
+		webp优于jpg
+		png8优于gif
+		对图片使用lazyload
+		避免使用DataURL
+	GPU加速
+		使用transition触发
+		transfrom触发
+		opacity
+	DOM层次不宜过多
+	js主动的释放内存
+css优化
+	层次不超过3
+	合并css规则（margin、background等）
+	移除空的css规则
+	去掉0的单位
+	不要申明过多的font-size
