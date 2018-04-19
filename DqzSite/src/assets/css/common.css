@@ -1,0 +1,107 @@
+/* =======查询区======= */
+
+.searchArea .el-row {
+  padding: 10px 20px;
+  margin: 0;
+  margin-top: 20px;
+  background-color: #f2f2f2;
+  flex-wrap: wrap;
+}
+
+.searchArea .el-col {
+  width: 280px;
+  margin: 10px 0;
+  line-height: 34px;
+}
+
+.searchArea .el-col .el-input,
+.searchArea .el-col .el-select {
+  width: 160px;
+}
+
+.searchArea .el-input {
+  width: initial;
+}
+
+.searchArea .el-button {
+  width: 85px;
+  height: 35px;
+  margin: 10px 0;
+}
+
+.searchArea .el-button,
+.searchArea .el-icon-search {
+  font-size: 15px;
+}
+
+
+/* 查询下方操作按钮 */
+
+.doMenu {
+  margin: 20px 0
+}
+
+
+/* 数据列表 */
+
+.headerRow {
+  color: #333333;
+  font-weight: 700;
+  font-size: 14px;
+}
+
+.headerRow th {
+  text-align: center!important;
+}
+
+.el-table__row {
+  font-size: 14px
+}
+
+.cellStyle {
+  text-align: center
+}
+
+
+/* 分页 */
+
+.el-pagination {
+  text-align: right;
+  margin: 20px;
+}
+
+
+/* 详情、编辑 */
+
+.viewBox {
+  width: 90%;
+  border: 1px solid #7c7f84;
+}
+
+.section {
+  border-bottom: 1px dashed;
+  padding-left: 40px;
+}
+
+.section .el-col {
+  margin: 10px 0;
+}
+
+.btn-hook {
+  margin: 20px 0 20px 45px!important;
+}
+
+.thumbImg {
+  width: 100px;
+  height: 100px;
+  margin-right: 20px;
+  cursor: pointer;
+  vertical-align: top
+}
+
+
+/* 富文本编辑器  菜单栏*/
+
+.w-e-toolbar {
+  flex-wrap: wrap;
+}
