@@ -1,0 +1,38 @@
+var tools = require("./comm.wxs");
+
+var a=10,b=20;
+// 加法运算
+// console.log(30 === a + b);//true
+// 减法运算
+// console.log(-10 === a - b);//true
+// 乘法运算
+// console.log(200 === a * b);//true
+// 除法运算
+// console.log(0.5 === a / b);//true
+// 取余运算
+// console.log(10 === a % b);//true
+// console.log(10 === b % a);//false
+// 自增运算
+// console.log(10 === a++);//true
+// console.log(12 === ++a);//false  11=== ++a true
+// 自减运算
+// console.log(11 === a--);//false 10 === a--
+// console.log(10 === --a);//false 9 === --a
+// 正值运算
+// console.log(10 === +a);//true
+// 负值运算
+// console.log(0 - 10 === -a);//true
+// 否运算
+// console.log(-11 === ~a);//true
+// 取反运算
+// console.log(false === !a);//true
+// delete 运算
+// console.log(true === delete a.fake);//true
+// void 运算
+// console.log(undefined === void a);//true
+// typeof 运算
+// console.log("number" === typeof a);//true
+console.log("===========================")
+console.log(tools.FOO);
+console.log(tools.bar("logic.wxs"));
+console.log(tools.msg);

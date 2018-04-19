@@ -1,0 +1,19 @@
+<!--index.wxml-->
+<view class="container">
+  <view class="userinfo">
+    <button wx:if="{{!hasUserInfo && canIUse}}" open-type="getUserInfo" bindgetuserinfo="getUserInfo"> 获取头像昵称 </button>
+    <block wx:else>
+      <image bindtap="bindViewTap" class="userinfo-avatar" src="{{userInfo.avatarUrl}}" background-size="cover"></image>
+      <text class="userinfo-nickname">{{userInfo.nickName}}</text>
+    </block>
+  </view>
+  <view class="usermotto">
+    <text class="user-motto">{{motto}}</text>
+  </view>
+  <view>{{tools.msg}}</view>
+  <view>{{tools.bar(tools.FOO)}}</view> 
+  <button class='pageBtn' size='mini' type='primary' bindtap='gotoLog'>log记录页面</button>
+  <button class='pageBtn' size='mini' type='primary' plain bindtap='gotoList'>列表页面</button>
+</view>
+<wxs src="./../comm.wxs" module="tools"></wxs>
+<wxs src="./../logic.wxs" module="logic"></wxs>
