@@ -17,7 +17,7 @@ Vue.config.productionTip = false;
 //post的data默认不是以form data的形式，而是request payload，设置此项可以form data形式传参；
 Vue.http.options.emulateJSON = true;
 
-Vue.prototype.root = 'http://admin.dev.rzb0086.com';
+Vue.prototype.root = '/';
 
 /* eslint-disable no-new */
 new Vue({
