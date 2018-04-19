@@ -1,0 +1,265 @@
+html,
+body,
+div,
+span,
+applet,
+object,
+iframe,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+blockquote,
+pre,
+a,
+abbr,
+acronym,
+address,
+big,
+cite,
+code,
+del,
+dfn,
+em,
+img,
+ins,
+kbd,
+q,
+s,
+samp,
+small,
+strike,
+strong,
+sub,
+sup,
+tt,
+var,
+b,
+u,
+i,
+center,
+dl,
+dt,
+dd,
+ol,
+ul,
+li,
+fieldset,
+form,
+label,
+legend,
+keygen,
+table,
+caption,
+tbody,
+tfoot,
+thead,
+tr,
+th,
+td,
+article,
+aside,
+canvas,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+menu,
+nav,
+section,
+summary,
+time,
+mark,
+audio,
+video,
+input,
+textarea,
+select,
+button {
+  margin: 0;
+  padding: 0;
+  border: none;
+  border: 0;
+  outline: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline;
+}
+
+html,
+body,
+form,
+fieldset,
+p,
+div,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  -webkit-text-size-adjust: none;
+}
+
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+menu,
+nav,
+section {
+  display: block;
+}
+
+ol,
+ul {
+  list-style: none;
+}
+
+em,
+i,
+cite,
+var,
+address,
+dfn {
+  font-style: normal;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+strong,
+b {
+  font-weight: normal;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: \5fae\8f6f\96c5\9ed1;
+}
+
+html,
+body,
+fieldset,
+img,
+iframe,
+abbr {
+  border: 0;
+}
+
+textarea {
+  overflow: auto;
+  resize: none;
+}
+
+a,
+button,
+label {
+  cursor: pointer;
+}
+
+textarea,
+input,
+button,
+select {
+  -webkit-appearance: none;
+  border-radius: 0;
+}
+
+input[type=radio] {
+  -webkit-appearance: radio;
+  border-radius: 100%;
+}
+
+input[type=checkbox] {
+  -webkit-appearance: checkbox;
+}
+
+textarea,
+input {
+  box-sizing: content-box;
+}
+
+body,
+html {
+  background-color: #ffffff;
+  height: 100%;
+  font-size: 14px;
+  color: #4A4A4A;
+}
+
+a {
+  color: #666;
+  text-decoration: none;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0.1);
+  display: inline-block;
+}
+
+input::-webkit-input-placeholder {
+  color: #ccc;
+}
+
+:-moz-placeholder {
+  color: #ccc;
+}
+
+::-moz-placeholder {
+  color: #ccc;
+}
+
+input:-ms-input-placeholder {
+  color: #ccc;
+}
+
+
+/*消除谷歌默认number样式*/
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none !important;
+  margin: 0;
+}
+
+
+/*消除火狐默认number样式*/
+
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+
+/* 替换vux样式 */
+
+.weui-tabbar__label {
+  color: #666666;
+}
+
+.weui-tabbar__item.weui-bar__item_on .weui-tabbar__label {
+  color: #666666!important;
+}
+
+.weui-tabbar__icon {
+  width: 20px!important;
+  height: 20px!important;
+}
+
+.vux-no-group-title {
+  margin-top: 0!important;
+  font-size: 14px!important;
+}
