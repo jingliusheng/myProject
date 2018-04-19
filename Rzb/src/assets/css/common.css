@@ -1,0 +1,20 @@
+/* =======查询区======= */
+.searchArea .el-row{padding:5px 20px;margin-top:20px;background-color:#f2f2f2;flex-wrap:wrap;}
+.searchArea .el-col{min-width:300px;margin:10px 0;}
+.searchArea .el-input{width:initial;}
+.searchArea .el-button{width:85px;height:37px;margin:10px 0;}
+.searchArea .el-button,
+.searchArea .el-icon-search{font-size:16px;}
+
+/* 查询下方操作按钮 */
+.doMenu{margin:20px 0}
+
+/* 数据列表的表头 */
+.headerRow{color:#333333;font-weight:700}
+
+/* 分页 */
+.el-pagination{text-align:right;margin:20px}
+
+/*清浮动*/
+.clear{zoom:1;}
+.clear:after{content:'';display:block;clear:both;}
