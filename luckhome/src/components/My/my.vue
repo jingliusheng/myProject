@@ -61,15 +61,15 @@ export default {
   data() {
     return {
       page: 1,
-      userinfo:{},
-      userupper:{},
-      messengerupper:{},
+      userinfo: {},
+      userupper: {},
+      messengerupper: {},
       dataList: [],
-      myfull:false,
-      login:true,
-      register:true,
-      bindphone:false,
-      changePhone:false,
+      myfull: false,
+      login: true,
+      register: true,
+      bindphone: false,
+      changePhone: false,
       upconfig: {
         content: "上拉加载",
         pullUpHeight: 40,
@@ -88,118 +88,129 @@ export default {
   },
   created() {
     document.getElementsByTagName("title")[0].innerText = "幸运之家--我的";
-    if(sessionStorage.getItem('user')){
-      this.userinfo = JSON.parse(sessionStorage.getItem('user'));
+    if (sessionStorage.getItem("user")) {
+      this.userinfo = JSON.parse(sessionStorage.getItem("user"));
       this.userupper = this.userinfo.upper_user_level;
       this.messengerupper = this.userinfo.upper_messenger_level;
       this.login = false;
       this.register = false;
-      if(!this.userinfo.phone){
+      if (!this.userinfo.phone) {
         this.bindphone = true;
-      }else{
+      } else {
         this.changePhone = true;
       }
-    }else{
+    } else {
       this.login = true;
       this.register = true;
     }
-    this.$http.get(this.GLOBAL.BASEURL + "User/luck_record").then(res=>{
-      var response = res.body;
-      if (response.status === this.GLOBAL.STATUSOBJ.ok) {
-        this.dataList = response.content;
-        if(this.dataList.length<10){
-           this.$refs.scroller.disablePullup();
+    this.$http.get(this.GLOBAL.BASEURL + "User/luck_record").then(
+      res => {
+        var response = res.body;
+        if (response.status === this.GLOBAL.STATUSOBJ.ok) {
+          this.dataList = response.content;
+          if (this.dataList.length < 10) {
+            this.$refs.scroller.disablePullup();
+          }
+        } else if (response.status === this.GLOBAL.STATUSOBJ.noLogin) {
+          this.$refs.scroller.disablePullup();
+        } else {
+          this.$refs.scroller.disablePullup();
+          this.$vux.toast.show({
+            width: "15em",
+            type: "text",
+            text: response.msg
+          });
         }
-      }else if(response.status === this.GLOBAL.STATUSOBJ.noLogin){
-        this.$refs.scroller.disablePullup();
-      }else{
-        this.$refs.scroller.disablePullup();
+      },
+      res => {
         this.$vux.toast.show({
-          width: "15em",
-          type: "text",
-          text: response.msg
-        });
-      }
-    },res=>{
-      this.$vux.toast.show({
           width: "15em",
           type: "text",
           text: "网络错误，请稍后重试"
         });
-    })
+      }
+    );
   },
   methods: {
-    uploadImg(){
+    uploadImg() {
       var _this = this;
       $("#form").ajaxSubmit({
         type: "POST",
         dataType: "JSON",
-        url: "http://www.xingyunfu.org/Luck/upload_image",
+        url: "",
         async: false,
         data: {
           photo: $("#form").serialize(),
-          type:'avatar'
+          type: "avatar"
         },
         success: function(res) {
-          if(res.status == 200) {
-            _this.modifyAvatar(res.content.url)
+          if (res.status == 200) {
+            _this.modifyAvatar(res.content.url);
           } else {
             alert(res.msg);
           }
         }
-      })
+      });
     },
-    modifyAvatar(url){
+    modifyAvatar(url) {
       var _this = this;
-      this.$http.post(this.GLOBAL.BASEURL + 'user/modify_info',{avatar:url}).then(res=>{
-        if (res.status == this.GLOBAL.STATUSOBJ.ok) {
-          _this.userinfo.avatar='/'+url;
-        }
-      })
+      this.$http
+        .post(this.GLOBAL.BASEURL + "user/modify_info", { avatar: url })
+        .then(res => {
+          if (res.status == this.GLOBAL.STATUSOBJ.ok) {
+            _this.userinfo.avatar = "/" + url;
+          }
+        });
     },
-    recharge(){
-       this.$router.push({path:'/recharge'});
+    recharge() {
+      this.$router.push({ path: "/recharge" });
     },
-    inviteList(){
-      this.$router.push({path:'/invitelist'});
+    inviteList() {
+      this.$router.push({ path: "/invitelist" });
     },
     loadMore() {
       this.page++;
-      this.$http.get(this.GLOBAL.BASEURL + "User/luck_record", { params: {page:this.page} }).then(
-        response => {
-          var response = response.body;
-          if (response.status == this.GLOBAL.STATUSOBJ.ok) {
-            this.dataList = this.dataList.concat(response.content);
-            this.$nextTick(() => {
-              this.$refs.scroller.donePullup();
-              this.$refs.scroller.reset();
+      this.$http
+        .get(this.GLOBAL.BASEURL + "User/luck_record", {
+          params: { page: this.page }
+        })
+        .then(
+          response => {
+            var response = response.body;
+            if (response.status == this.GLOBAL.STATUSOBJ.ok) {
+              this.dataList = this.dataList.concat(response.content);
+              this.$nextTick(() => {
+                this.$refs.scroller.donePullup();
+                this.$refs.scroller.reset();
 
-              this.page++;
-              this.$http
-                .get(this.GLOBAL.BASEURL + "User/luck_record", { params: {page:this.page} })
-                .then(response => {
-                  response = response.body;
-                  if (response.status != this.GLOBAL.STATUSOBJ.ok) {
-                    this.$refs.scroller.disablePullup();
-                  }
-                });
-              this.page--;
+                this.page++;
+                this.$http
+                  .get(this.GLOBAL.BASEURL + "User/luck_record", {
+                    params: { page: this.page }
+                  })
+                  .then(response => {
+                    response = response.body;
+                    if (response.status != this.GLOBAL.STATUSOBJ.ok) {
+                      this.$refs.scroller.disablePullup();
+                    }
+                  });
+                this.page--;
+              });
+            } else {
+              this.$refs.scroller.disablePullup();
+            }
+          },
+          response => {
+            this.$refs.scroller.reset({
+              top: 0
             });
-          }else{
-            this.$refs.scroller.disablePullup();
+            this.$vux.toast.show({
+              width: "15em",
+              type: "text",
+              text: "网络错误，请稍后重试"
+            });
           }
-        },
-        response => {
-           this.$refs.scroller.reset({
-             top:0
-           });
-          this.$vux.toast.show({
-            width: "15em",
-            type: "text",
-            text: "网络错误，请稍后重试"
-          });
-        }
-      );
+        );
     }
   }
 };
@@ -210,17 +221,17 @@ export default {
   margin-bottom: -50px;
   background-color: #ffffff;
   .myInfo {
-    padding:14px;
+    padding: 14px;
     text-align: center;
     .myAvata {
       display: flex;
       justify-content: flex-start;
       align-items: center;
       overflow: hidden;
-      .avatarWrapper{
+      .avatarWrapper {
         position: relative;
         margin-right: 10px;
-        .avatarImg{
+        .avatarImg {
           width: 75px;
           height: 75px;
           border: 5px solid #ececec;
@@ -233,7 +244,7 @@ export default {
           left: 45px;
           top: 45px;
         }
-        .uploadImg{
+        .uploadImg {
           position: absolute;
           width: 75px;
           height: 75px;
@@ -242,15 +253,15 @@ export default {
           opacity: 0;
         }
       }
-      .myName{
+      .myName {
         line-height: 23px;
-        color:#666666;
+        color: #666666;
         font-size: 15px;
-        text-align: left;        
+        text-align: left;
       }
     }
-    .myInfo-level{
-      color:#666666;
+    .myInfo-level {
+      color: #666666;
       font-size: 13px;
       line-height: 23px;
       text-align: left;
@@ -262,7 +273,7 @@ export default {
       font-size: 13px;
       line-height: 26px;
       margin: 10px 15px;
-      &.balance{
+      &.balance {
         margin: 0 15px;
       }
     }
@@ -274,8 +285,8 @@ export default {
     background-color: #f5f5f5;
     display: flex;
     justify-content: space-between;
-    span{
-      color: #17499F;
+    span {
+      color: #17499f;
     }
   }
   .noRecords {
@@ -283,19 +294,19 @@ export default {
     margin: 44px auto 0;
   }
   .recordsList {
-    .recordsList-item{
+    .recordsList-item {
       padding-left: 15px;
       padding-top: 8px;
       padding-bottom: 8px;
       box-sizing: border-box;
-      color:#999999;
+      color: #999999;
       font-size: 13px;
       line-height: 25px;
-      .recordsList-item-type{
-        color:#333333;
+      .recordsList-item-type {
+        color: #333333;
         font-size: 15px;
         line-height: 27px;
-        span{
+        span {
           display: inline-block;
           width: 30%;
         }

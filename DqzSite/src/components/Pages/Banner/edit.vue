@@ -12,7 +12,7 @@
               <el-upload
                 class="banner-uploader"
                 accept="image/jpg,image/png,image/jpeg,image/webp,image/gif,image/bmp"
-                action="http://file.jxdqzb.com/image/upload"
+                action=""
                 :data="paramData"
                 :show-file-list="false"
                 :on-success="handleUploadSuccess"
@@ -79,232 +79,246 @@
 </template>
 
 <script>
-  const ISDEV = /\.dev/.test(location.hostname);
-  import breadcrumb from '../Breadcrumb/breadcrumb'
-  export default {
-    name: 'editBanner',
-    components: {
-      breadcrumb
-    },
-    props: {
-      bannerObject: {
-        type: Object
+const ISDEV = /\.dev/.test(location.hostname);
+import breadcrumb from "../Breadcrumb/breadcrumb";
+export default {
+  name: "editBanner",
+  components: {
+    breadcrumb
+  },
+  props: {
+    bannerObject: {
+      type: Object
+    }
+  },
+  data() {
+    var checkLen = (rule, value, callback) => {
+      if (!value) {
+        return callback(new Error("请输入名称"));
+      } else if (this.$regobj.IsAllSpace(value)) {
+        return callback(new Error("名称不能全为空格"));
+      } else {
+        let len = this.$regobj.getLen(value);
+        if (len > 64) {
+          return callback(new Error("名称不超过32个汉字"));
+        } else {
+          return callback();
+        }
       }
-    },
-    data() {
-      var checkLen = (rule, value, callback) => {
-        if (!value) {
-          return callback(new Error('请输入名称'))
-        } else if (this.$regobj.IsAllSpace(value)) {
-          return callback(new Error('名称不能全为空格'));
-        } else {
-          let len = this.$regobj.getLen(value);
-          if (len > 64) {
-            return callback(new Error('名称不超过32个汉字'));
-          } else {
-            return callback();
-          }
-        }
-      };
-      var checkStartTime = (rule, value, callback) => {
-        if (value === '') {
-          callback(new Error('请选择开始时间'));
-        } else if (value !== '' && this.tempbanner.endtime !== '') {
-          if (this.tempbanner.starttime > this.tempbanner.endtime) {
-            callback(new Error('开始时间不能大于结束时间'))
-          } else {
-            callback();
-          }
+    };
+    var checkStartTime = (rule, value, callback) => {
+      if (value === "") {
+        callback(new Error("请选择开始时间"));
+      } else if (value !== "" && this.tempbanner.endtime !== "") {
+        if (this.tempbanner.starttime > this.tempbanner.endtime) {
+          callback(new Error("开始时间不能大于结束时间"));
         } else {
           callback();
         }
-      };
-      var checkEndTime = (rule, value, callback) => {
-        if (value === '') {
-          callback(new Error('请选择结束时间'));
-        } else if (value !== '' && this.tempbanner.starttime !== '') {
-          if (this.tempbanner.starttime > this.tempbanner.endtime) {
-            callback(new Error('结束时间不能小于开始时间'))
-          } else {
-            callback();
-          }
+      } else {
+        callback();
+      }
+    };
+    var checkEndTime = (rule, value, callback) => {
+      if (value === "") {
+        callback(new Error("请选择结束时间"));
+      } else if (value !== "" && this.tempbanner.starttime !== "") {
+        if (this.tempbanner.starttime > this.tempbanner.endtime) {
+          callback(new Error("结束时间不能小于开始时间"));
         } else {
           callback();
         }
-      };
-      return {
-        breadcrumbData: {
-          primary_menu: '平台管理',
-          second_menu: 'Banner列表',
-          third_menu: this.bannerObject.id ? '管理轮播图' : '添加轮播图'
-        },
-        paramData: {
-          project: ISDEV ? 'ecircledev' : 'ecircle',
-          path: 'banner',
-          rule: 'custom'
-        },
-        adding: false,
-        options1: this.$store.state.bannerCityList,
-        tempbanner: {},
-        rules: {
-          title: [{
+      } else {
+        callback();
+      }
+    };
+    return {
+      breadcrumbData: {
+        primary_menu: "平台管理",
+        second_menu: "Banner列表",
+        third_menu: this.bannerObject.id ? "管理轮播图" : "添加轮播图"
+      },
+      paramData: {
+        project: ISDEV ? "ecircledev" : "ecircle",
+        path: "banner",
+        rule: "custom"
+      },
+      adding: false,
+      options1: this.$store.state.bannerCityList,
+      tempbanner: {},
+      rules: {
+        title: [
+          {
             required: true,
-            message: '名称不能为空',
-            trigger: 'blur'
-          }, {
+            message: "名称不能为空",
+            trigger: "blur"
+          },
+          {
             validator: checkLen,
-            trigger: 'change'
-          }],
-          pic: [{
+            trigger: "change"
+          }
+        ],
+        pic: [
+          {
             required: true,
-            message: '请上传图片',
-            trigger: 'blur,change'
-          }],
-          cname: [{
+            message: "请上传图片",
+            trigger: "blur,change"
+          }
+        ],
+        cname: [
+          {
             required: true,
-            message: '请选择地区',
-            trigger: 'blur,change'
-          }],
-          starttime: [{
+            message: "请选择地区",
+            trigger: "blur,change"
+          }
+        ],
+        starttime: [
+          {
             required: true,
-            message: '请选择开始时间',
-            trigger: 'blur,change'
-          }, {
+            message: "请选择开始时间",
+            trigger: "blur,change"
+          },
+          {
             validator: checkStartTime,
-            trigger: 'blur,change'
-          }],
-          endtime: [{
+            trigger: "blur,change"
+          }
+        ],
+        endtime: [
+          {
             required: true,
-            message: '请选择结束时间',
-            trigger: 'blur,change'
-          }, {
+            message: "请选择结束时间",
+            trigger: "blur,change"
+          },
+          {
             validator: checkEndTime,
-            trigger: 'blur,change'
-          }]
-        }
+            trigger: "blur,change"
+          }
+        ]
       }
+    };
+  },
+  created() {
+    this.tempbanner = this.bannerObject;
+    this.tempbanner._self = JSON.parse(JSON.stringify(this.bannerObject));
+  },
+  methods: {
+    //隐藏
+    hide() {
+      this.$emit("cancleEdit", this.tempbanner);
     },
-    created() {
-      this.tempbanner = this.bannerObject;
-      this.tempbanner._self = JSON.parse(JSON.stringify(this.bannerObject))
+    // //banner上传之前的
+    // beforeBannerUpload(file) {
+    //   let _this = this;
+    //   let isLt500 = file.size / 1024 < 500;
+    //   if (!isLt500) {
+    //     _this.$message.error('图片大小不超过500kb');
+    //   }
+    //   return isLt500;
+    // },
+    //banner上传成功的回调
+    handleUploadSuccess(res, file) {
+      this.tempbanner.pic = res.data[0].url;
     },
-    methods: {
-      //隐藏
-      hide() {
-        this.$emit('cancleEdit', this.tempbanner);
-      },
-      // //banner上传之前的
-      // beforeBannerUpload(file) {
-      //   let _this = this;
-      //   let isLt500 = file.size / 1024 < 500;
-      //   if (!isLt500) {
-      //     _this.$message.error('图片大小不超过500kb');
-      //   }
-      //   return isLt500;
-      // },
-      //banner上传成功的回调
-      handleUploadSuccess(res, file) {
-        this.tempbanner.pic = "http://file.jxdqzb.com/" + res.data[0].url;
-      },
-      //保存、添加
-      submitForm(formName) {
-        this.$refs[formName].validate((valid) => {
-          if (valid) {
-            let tipText = this.tempbanner.id ? '是否确定保存?' : '是否确定添加?';
-            this.$confirm(tipText, '提示', {
-                confirmButtonText: '确定',
-                cancelButtonText: '取消',
-                type: 'info'
-              })
-              .then(() => {
-                delete this.tempbanner._self;
-                this.adding = true;
-                this.$axios.post('/Index/banner_add', this.tempbanner)
-                  .then((response) => {
-                    let res = response.data;
-                    if (res.status == 200) {
-                      setTimeout(() => {
-                        if (!this.tempbanner.id) {
-                          this.$emit('addSure');
-                        } else {
-                          this.$emit('editSure')
-                        }
-                        this.adding = false;
-                      }, 1000);
-                      this.$message({
-                        message: res.msg,
-                        duration: 1000,
-                        type: 'success'
-                      })
-                    } else {
+    //保存、添加
+    submitForm(formName) {
+      this.$refs[formName].validate(valid => {
+        if (valid) {
+          let tipText = this.tempbanner.id ? "是否确定保存?" : "是否确定添加?";
+          this.$confirm(tipText, "提示", {
+            confirmButtonText: "确定",
+            cancelButtonText: "取消",
+            type: "info"
+          })
+            .then(() => {
+              delete this.tempbanner._self;
+              this.adding = true;
+              this.$axios
+                .post("/Index/banner_add", this.tempbanner)
+                .then(response => {
+                  let res = response.data;
+                  if (res.status == 200) {
+                    setTimeout(() => {
+                      if (!this.tempbanner.id) {
+                        this.$emit("addSure");
+                      } else {
+                        this.$emit("editSure");
+                      }
                       this.adding = false;
-                      this.$message({
-                        message: res.msg,
-                        duration: 1000,
-                        type: 'error'
-                      })
-                    }
-                  })
-                  .catch(() => {
+                    }, 1000);
+                    this.$message({
+                      message: res.msg,
+                      duration: 1000,
+                      type: "success"
+                    });
+                  } else {
                     this.adding = false;
                     this.$message({
-                      message: "网络原因,请稍后重试",
+                      message: res.msg,
                       duration: 1000,
-                      type: 'error'
-                    })
-                  })
-              })
-              .catch(() => {
-                this.$message({
-                  message: '操作取消',
-                  duration: 1000
+                      type: "error"
+                    });
+                  }
                 })
-              })
-          }
-        });
-      },
-      //下拉框值发生变化
-      changCname(arg) {
-        if (arg == this.options1[0].name) {
-          this.tempbanner.sign = '1'
-        } else {
-          this.tempbanner.sign = '0'
+                .catch(() => {
+                  this.adding = false;
+                  this.$message({
+                    message: "网络原因,请稍后重试",
+                    duration: 1000,
+                    type: "error"
+                  });
+                });
+            })
+            .catch(() => {
+              this.$message({
+                message: "操作取消",
+                duration: 1000
+              });
+            });
         }
+      });
+    },
+    //下拉框值发生变化
+    changCname(arg) {
+      if (arg == this.options1[0].name) {
+        this.tempbanner.sign = "1";
+      } else {
+        this.tempbanner.sign = "0";
       }
     }
   }
+};
 </script>
 
 <style scoped>
-  .el-form {
-    width: 500px;
-    padding: 20px;
-  }
-  
-  .banner-uploader-icon {
-    font-size: 28px;
-    color: #8c939d;
-    width: 100px;
-    height: 100px;
-    line-height: 100px;
-    text-align: center;
-    border: 1px dashed #d9d9d9;
-    cursor: pointer;
-    position: relative;
-    overflow: hidden;
-  }
-  
-  .banner-uploader-icon:hover {
-    border-color: #409EFF;
-  }
-  
-  .banner {
-    width: 100px;
-    height: 100px;
-    display: block;
-  }
-  
-  .hook {
-    margin-bottom: 0
-  }
+.el-form {
+  width: 500px;
+  padding: 20px;
+}
+
+.banner-uploader-icon {
+  font-size: 28px;
+  color: #8c939d;
+  width: 100px;
+  height: 100px;
+  line-height: 100px;
+  text-align: center;
+  border: 1px dashed #d9d9d9;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+
+.banner-uploader-icon:hover {
+  border-color: #409eff;
+}
+
+.banner {
+  width: 100px;
+  height: 100px;
+  display: block;
+}
+
+.hook {
+  margin-bottom: 0;
+}
 </style>

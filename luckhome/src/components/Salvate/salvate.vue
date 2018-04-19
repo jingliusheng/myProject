@@ -53,20 +53,20 @@
 
 <script>
 import { Flexbox, FlexboxItem, XButton } from "vux";
-import Buy from '../Buy/buy';
+import Buy from "../Buy/buy";
 export default {
   data() {
     return {
       buddhaId: 10,
-      buddhaInfo:{},
-      purchasedTributes:[],
-      tributes:[],
-      level1:[],
-      level2:[],
-      userInfo:{},
+      buddhaInfo: {},
+      purchasedTributes: [],
+      tributes: [],
+      level1: [],
+      level2: [],
+      userInfo: {},
       count: false,
-      isUp:false,
-      pre:'',
+      isUp: false,
+      pre: "",
       isCouont: false, //是否计时的标志
       str: "00:00:00", //时间字符串
       HH: 0, //时
@@ -75,25 +75,25 @@ export default {
     };
   },
   methods: {
-    uploadImg(ev){
+    uploadImg(ev) {
       var _this = this;
       $(".uploadForm").ajaxSubmit({
         type: "POST",
         dataType: "JSON",
-        url: "http://www.xingyunfu.org/Luck/upload_image",
+        url: "",
         async: false,
         data: {
           photo: $(".uploadForm").serialize()
         },
         success: function(res) {
-          if(res.status == 200) {
+          if (res.status == 200) {
             _this.isUp = true;
-            _this.pre = 'http://www.xingyunfu.org/'+res.content.url;
+            _this.pre = res.content.url;
           } else {
             alert(res.msg);
           }
         }
-      })
+      });
     },
     startCount() {
       this.count = true;
@@ -108,23 +108,26 @@ export default {
       this.str = "00:00:00";
       this.isCouont = false;
       this.count = false;
-      this.$router.push({ name: 'tribute', params:{buddha:this.buddhaInfo }});
+      this.$router.push({
+        name: "tribute",
+        params: { buddha: this.buddhaInfo }
+      });
     },
     buy() {
       /*
       登录才可购买
       */
-      if(!this.userInfo){
+      if (!this.userInfo) {
         this.$vux.toast.show({
           width: "15em",
           type: "text",
           time: "1000",
           text: "请先登录"
         });
-        setTimeout(()=>{
-          this.$router.push({path:'/login'})
-        },1000)
-      }else{
+        setTimeout(() => {
+          this.$router.push({ path: "/login" });
+        }, 1000);
+      } else {
         this.$refs.buy.show();
       }
     },
@@ -148,36 +151,37 @@ export default {
       }
     },
     /**
-    * 处理贡品
-    */
-    tribute(tributes){
+     * 处理贡品
+     */
+    tribute(tributes) {
       var _this = this;
-      if(!tributes){
+      if (!tributes) {
         return false;
       }
       for (var i in tributes) {
-        if(tributes[i].col == '1'){
+        if (tributes[i].col == "1") {
           _this.level1.push(tributes[i]);
-        }else{
+        } else {
           _this.level2.push(tributes[i]);
         }
       }
     }
   },
   created() {
-    this.userInfo = JSON.parse( sessionStorage.getItem('user') );
+    this.userInfo = JSON.parse(sessionStorage.getItem("user"));
     this.$http
       .post(this.GLOBAL.BASEURL + "Luck/salvate", { id: this.buddhaId })
       .then(
         res => {
           var response = res.body;
-          if(response.status == this.GLOBAL.STATUSOBJ.ok){
+          if (response.status == this.GLOBAL.STATUSOBJ.ok) {
             this.buddhaInfo = response.content.buddha;
             this.purchasedTributes = response.content.purchasedTributes;
             this.tributes = response.content.tributes;
             this.tribute(response.content.purchasedTributes);
-            document.getElementsByTagName("title")[0].innerText = "幸运之家--"+response.content.buddha.name;
-          }else{
+            document.getElementsByTagName("title")[0].innerText =
+              "幸运之家--" + response.content.buddha.name;
+          } else {
             this.$vux.toast.show({
               width: "15em",
               type: "text",
@@ -230,7 +234,7 @@ export default {
       height: calc(~"100vh - 200px");
       margin: 10px 0;
     }
-    #fileImg{
+    #fileImg {
       width: 65%;
       position: absolute;
       top: 0;
@@ -239,8 +243,9 @@ export default {
       bottom: 0;
       margin: auto;
     }
-    .uploadForm{
-      #addImg,#img{
+    .uploadForm {
+      #addImg,
+      #img {
         position: absolute;
         width: 120px;
         height: 120px;
@@ -248,9 +253,9 @@ export default {
         left: 0;
         right: 0;
         bottom: 0;
-        margin:auto;
+        margin: auto;
       }
-      #img{
+      #img {
         opacity: 0;
       }
     }
@@ -283,10 +288,12 @@ export default {
     margin-right: 5px;
   }
 }
-.fade-enter-active, .fade-leave-active {
-  transition: opacity .5s
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s;
 }
-.fade-enter, .fade-leave-to /* .fade-leave-active in below version 2.1.8 */ {
-  opacity: 0
+.fade-enter,
+.fade-leave-to {
+  opacity: 0;
 }
 </style>

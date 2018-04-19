@@ -9,7 +9,7 @@
                 <el-upload
                         class="avatar-uploader"
                         accept="image/jpg,image/png,image/jpeg,image/webp,image/gif,image/bmp"
-                        action="http://file.jxdqzb.com/image/upload"
+                        action="/"
                         :data="paramData"
                         :show-file-list="false"
                         :on-success="handleAvatarSuccess"
@@ -62,172 +62,183 @@
 </template>
 
 <script type="text/ecmascript-6">
-    import bus from '../../assets/js/eventBus';
-    import breadcrumb from '../Breadcrumb/breadcrumb'
-    export default{
-        components: {
-            breadcrumb
-        },
-        computed: {
-            isManage(){
-                return this.$route.params.id == 'null' ? false : true;
-            }
-        },
-        data(){
-            var checkStartTime = (rule, value, callback)=>{
-              if(value === ''){
-                callback(new Error('请选择开始时间'));
-              }else if(value!=='' && this.roleForm.endtime !== ''){
-                if(this.roleForm.starttime>this.roleForm.endtime){
-                  callback(new Error('开始时间不能大于结束时间'))
-                }else{
-                  callback();
-                }
-              }else{
-                callback();
-              }
-            };
-            var checkEndTime = (rule, value, callback)=> {
-                if (value === '') {
-                  callback(new Error('请选择结束时间'));
-                }else if(value!=='' && this.roleForm.starttime !== ''){
-                  if(this.roleForm.starttime>this.roleForm.endtime){
-                    callback(new Error('结束时间不能小于开始时间'))
-                  }else{
-                    callback();
-                  }   
-                }else{
-                  callback();
-                }
-            };
-            return {
-                breadcrumbData: {
-                    link: '/RZB_plantform_banner',
-                    primary_menu: '平台管理',
-                    second_menu: this.$route.params.id == 'null' ? '添加banner' : '管理banner'
-                },
-                adding: false,
-                paramData:{
-                  project:'rzbdev',
-                  path:'banner'
-                },
-                roleForm: {
-                    title: '',
-                    pic: '',
-                    starttime:'',
-                    endtime:'',
-                    weight:'',
-                    targeturl:''
-                },
-                isshow:'1',
-                rules:{
-                  title:[
-                    { required: true,message: '请输入名称', trigger: 'blur,change'},
-                    { min: 1, max: 32, message: '不超过32个字', trigger: 'blur,change' }
-                  ],
-                  pic:[
-                    { required: true,message: '请上传图片'}
-                  ],
-                  starttime:[
-                    { required: true,message: '请选择开始时间', trigger: 'blur,change'},
-                    { validator: checkStartTime, trigger: 'blur,change' }
-                  ],
-                  endtime:[
-                    { required: true,message:'请选择结束时间', trigger: 'blur,change'},
-                    { validator: checkEndTime, trigger: 'blur,change' }
-                  ],
-                }
-            }
-        },
-        methods: {
-            handleAvatarSuccess(res, file) {
-                this.roleForm.pic = "http://file.jxdqzb.com/"+ res.data[0].url;
-            },
-            beforeBannerUpload(file) {
-              let _this = this;
-              let isLt500 = file.size / 1024  <500 ;
-              if(!isLt500){
-                _this.$message.error('图片大小不超过500kb'); 
-              }
-              return isLt500;   
-            },
- 
-            submitForm(formName) {
-              this.roleForm.isshow = this.isshow;
-                this.$refs[formName].validate((valid) => {
-                    if (valid) {
-                        this.adding = true;
-                        this.$http.post(this.root + '/Plantform/banner_update', this.roleForm).then(response=> {
-                            var res = response.body;
-                            if (res.status == 200) {
-                                bus.$emit('roleId', this.$route.params.id);
-                                this.$message.success(res.msg);
-                                setTimeout(()=> {
-                                    this.adding = false;
-                                    this.$router.push({path: '/RZB_plantform_banner'})
-                                }, 1000)
-                            } else {
-                                this.adding = false;
-                                this.$message.error(res.msg);
-                            }
-                        }, response=> {
-                            this.adding = false;
-                            this.$message.error('网络原因');
-                        })
-                    } else {
-                        return false;
-                    }
-                });
-            },
-            resetForm(formName) {
-                this.$refs[formName].resetFields();
-                this.$router.push({path: '/RZB_plantform_banner'})
-            }
-        },
-        mounted(){
-            if(this.isManage){
-                this.$http.post(this.root + '/Plantform/banner_edit',{id:this.$route.params.id}).then(response=>{
-                    var res = response.body;
-                    if(res.status == 200){
-                        this.roleForm = res.content;
-                        this.isshow = this.roleForm.isshow;
-                    }else{
-                        this.$message.error(res.msg);
-                    }
-                },response=>{
-                    this.$message.error('网络原因');
-                })
-            }
-        }
+import bus from "../../assets/js/eventBus";
+import breadcrumb from "../Breadcrumb/breadcrumb";
+export default {
+  components: {
+    breadcrumb
+  },
+  computed: {
+    isManage() {
+      return this.$route.params.id == "null" ? false : true;
     }
+  },
+  data() {
+    var checkStartTime = (rule, value, callback) => {
+      if (value === "") {
+        callback(new Error("请选择开始时间"));
+      } else if (value !== "" && this.roleForm.endtime !== "") {
+        if (this.roleForm.starttime > this.roleForm.endtime) {
+          callback(new Error("开始时间不能大于结束时间"));
+        } else {
+          callback();
+        }
+      } else {
+        callback();
+      }
+    };
+    var checkEndTime = (rule, value, callback) => {
+      if (value === "") {
+        callback(new Error("请选择结束时间"));
+      } else if (value !== "" && this.roleForm.starttime !== "") {
+        if (this.roleForm.starttime > this.roleForm.endtime) {
+          callback(new Error("结束时间不能小于开始时间"));
+        } else {
+          callback();
+        }
+      } else {
+        callback();
+      }
+    };
+    return {
+      breadcrumbData: {
+        link: "/RZB_plantform_banner",
+        primary_menu: "平台管理",
+        second_menu:
+          this.$route.params.id == "null" ? "添加banner" : "管理banner"
+      },
+      adding: false,
+      paramData: {
+        project: "rzbdev",
+        path: "banner"
+      },
+      roleForm: {
+        title: "",
+        pic: "",
+        starttime: "",
+        endtime: "",
+        weight: "",
+        targeturl: ""
+      },
+      isshow: "1",
+      rules: {
+        title: [
+          { required: true, message: "请输入名称", trigger: "blur,change" },
+          { min: 1, max: 32, message: "不超过32个字", trigger: "blur,change" }
+        ],
+        pic: [{ required: true, message: "请上传图片" }],
+        starttime: [
+          { required: true, message: "请选择开始时间", trigger: "blur,change" },
+          { validator: checkStartTime, trigger: "blur,change" }
+        ],
+        endtime: [
+          { required: true, message: "请选择结束时间", trigger: "blur,change" },
+          { validator: checkEndTime, trigger: "blur,change" }
+        ]
+      }
+    };
+  },
+  methods: {
+    handleAvatarSuccess(res, file) {
+      this.roleForm.pic = res.data[0].url;
+    },
+    beforeBannerUpload(file) {
+      let _this = this;
+      let isLt500 = file.size / 1024 < 500;
+      if (!isLt500) {
+        _this.$message.error("图片大小不超过500kb");
+      }
+      return isLt500;
+    },
+
+    submitForm(formName) {
+      this.roleForm.isshow = this.isshow;
+      this.$refs[formName].validate(valid => {
+        if (valid) {
+          this.adding = true;
+          this.$http
+            .post(this.root + "/Plantform/banner_update", this.roleForm)
+            .then(
+              response => {
+                var res = response.body;
+                if (res.status == 200) {
+                  bus.$emit("roleId", this.$route.params.id);
+                  this.$message.success(res.msg);
+                  setTimeout(() => {
+                    this.adding = false;
+                    this.$router.push({ path: "/RZB_plantform_banner" });
+                  }, 1000);
+                } else {
+                  this.adding = false;
+                  this.$message.error(res.msg);
+                }
+              },
+              response => {
+                this.adding = false;
+                this.$message.error("网络原因");
+              }
+            );
+        } else {
+          return false;
+        }
+      });
+    },
+    resetForm(formName) {
+      this.$refs[formName].resetFields();
+      this.$router.push({ path: "/RZB_plantform_banner" });
+    }
+  },
+  mounted() {
+    if (this.isManage) {
+      this.$http
+        .post(this.root + "/Plantform/banner_edit", {
+          id: this.$route.params.id
+        })
+        .then(
+          response => {
+            var res = response.body;
+            if (res.status == 200) {
+              this.roleForm = res.content;
+              this.isshow = this.roleForm.isshow;
+            } else {
+              this.$message.error(res.msg);
+            }
+          },
+          response => {
+            this.$message.error("网络原因");
+          }
+        );
+    }
+  }
+};
 </script>
 
 <style scoped>
-    .demo-roleForm{
-        width: 500px;
-    }
+.demo-roleForm {
+  width: 500px;
+}
 
-    .avatar-uploader-icon {
-        font-size: 28px;
-        color: #8c939d;
-        width: 130px;
-        height: 130px;
-        line-height: 130px;
-        text-align: center;
-        border: 1px dashed #d9d9d9;
-        cursor: pointer;
-         position: relative;
-        overflow: hidden;
-    }
-    .avatar-uploader-icon:hover{
-      border-color: #409EFF;
-    }
-    .avatar {
-        width: 130px;
-        height: 130px;
-        display: block;
-    }
-    .col-center{
-      text-align: center;
-    }
+.avatar-uploader-icon {
+  font-size: 28px;
+  color: #8c939d;
+  width: 130px;
+  height: 130px;
+  line-height: 130px;
+  text-align: center;
+  border: 1px dashed #d9d9d9;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+.avatar-uploader-icon:hover {
+  border-color: #409eff;
+}
+.avatar {
+  width: 130px;
+  height: 130px;
+  display: block;
+}
+.col-center {
+  text-align: center;
+}
 </style>

@@ -114,265 +114,288 @@
 </template>
 
 <script>
-  const ISDEV = /\.dev/.test(location.hostname);
-  import breadcrumb from '../Breadcrumb/breadcrumb'
-  export default {
-    name: 'memberList',
-    data() {
-      return {
-        breadcrumbData: {
-          primary_menu: '会员管理',
-          second_menu: '会员列表'
+const ISDEV = /\.dev/.test(location.hostname);
+import breadcrumb from "../Breadcrumb/breadcrumb";
+export default {
+  name: "memberList",
+  data() {
+    return {
+      breadcrumbData: {
+        primary_menu: "会员管理",
+        second_menu: "会员列表"
+      },
+      isDisabled: false,
+      loading: true,
+      totalRows: 0,
+      tableData: [],
+      cityOptions: [],
+      exportUrl: ISDEV ? "" : "",
+      searchData: {
+        authstate: "",
+        starttime: "",
+        endtime: "",
+        regway: "",
+        identifier: "",
+        phone: "",
+        city: "全部",
+        sign: 1,
+        pageSize: 10,
+        page: 1
+      },
+      stateOptions: [
+        {
+          value: "",
+          label: "全部"
         },
-        isDisabled: false,
-        loading: true,
-        totalRows: 0,
-        tableData: [],
-        cityOptions: [],
-        exportUrl: ISDEV ? 'http://siteadmin.dev.e-circle.cn/index.php?s=/Admin/Member/export.html' : 'http://siteadmin.e-circle.cn/index.php?s=/Admin/Member/export.html',
-        searchData: {
-          authstate: '',
-          starttime: '',
-          endtime: '',
-          regway: '',
-          identifier: '',
-          phone: '',
-          city: '全部',
+        {
+          value: "0",
+          label: "未申请"
+        },
+        {
+          value: "1",
+          label: "待审核"
+        },
+        {
+          value: "2",
+          label: "未通过"
+        },
+        {
+          value: "3",
+          label: "已通过"
+        }
+      ],
+      regwayOptions: [
+        {
+          value: "",
+          label: "全部"
+        },
+        {
+          value: "app",
+          label: "电圈子App"
+        },
+        {
+          value: "pc",
+          label: "电圈子官网"
+        },
+        {
+          value: "rzb_app",
+          label: "认证宝App"
+        },
+        {
+          value: "rzb_wap",
+          label: "认证宝移动端"
+        },
+        {
+          value: "rzb_pc",
+          label: "认证宝PC端"
+        },
+        {
+          value: "hon_pc",
+          label: "E兑付PC端"
+        },
+        {
+          value: "hon_wap",
+          label: "E兑付移动端"
+        },
+        {
+          value: "synch",
+          label: "同步"
+        },
+        {
+          value: "ykt",
+          label: "电气云课堂"
+        }
+      ]
+    };
+  },
+  components: {
+    breadcrumb
+  },
+  mounted() {
+    setTimeout(() => {
+      this.cityOptions = this.$store.state.memberCityList;
+      this.loading = false;
+    }, 800);
+    this.getList();
+  },
+  watch: {
+    $route: function(val, oldVal) {
+      if (val.path == "/member") {
+        this.searchData = {
+          authstate: "",
+          starttime: "",
+          endtime: "",
+          regway: "",
+          identifier: "",
+          phone: "",
+          city: "全部",
           sign: 1,
           pageSize: 10,
           page: 1
-        },
-        stateOptions: [{
-          "value": "",
-          "label": "全部"
-        }, {
-          "value": "0",
-          "label": "未申请"
-        }, {
-          "value": "1",
-          "label": "待审核"
-        }, {
-          "value": "2",
-          "label": "未通过"
-        }, {
-          "value": "3",
-          "label": "已通过"
-        }],
-        regwayOptions: [{
-          "value": "",
-          "label": "全部"
-        }, {
-          "value": "app",
-          "label": "电圈子App"
-        }, {
-          "value": "pc",
-          "label": "电圈子官网"
-        }, {
-          "value": "rzb_app",
-          "label": "认证宝App"
-        }, {
-          "value": "rzb_wap",
-          "label": "认证宝移动端"
-        }, {
-          "value": "rzb_pc",
-          "label": "认证宝PC端"
-        }, {
-          "value": "hon_pc",
-          "label": "E兑付PC端"
-        }, {
-          "value": "hon_wap",
-          "label": "E兑付移动端"
-        }, {
-          "value": "synch",
-          "label": "同步"
-        }, {
-          "value": "ykt",
-          "label": "电气云课堂"
-        }],
+        };
+        this.getList();
       }
-    },
-    components: {
-      breadcrumb
-    },
-    mounted() {
-      setTimeout(() => {
-        this.cityOptions = this.$store.state.memberCityList;
-        this.loading = false;
-      }, 800);
-      this.getList();
-    },
-    watch: {
-      '$route': function(val, oldVal) {
-        if (val.path == '/member') {
-          this.searchData = {
-            authstate: '',
-            starttime: '',
-            endtime: '',
-            regway: '',
-            identifier: '',
-            phone: '',
-            city: '全部',
-            sign: 1,
-            pageSize: 10,
-            page: 1
-          }
-          this.getList();
-        }
+    }
+  },
+  methods: {
+    //格式化会员的来源
+    formatRegway(column) {
+      let regStr = "";
+      switch (column.regway) {
+        case "app":
+          regStr = "电圈子APP";
+          break;
+        case "pc":
+          regStr = "电圈子官网";
+          break;
+        case "rzb_app":
+          regStr = "认证宝App";
+          break;
+        case "rzb_wap":
+          regStr = "认证宝移动端";
+          break;
+        case "rzb_pc":
+          regStr = "认证宝PC端";
+          break;
+        case "hon_pc":
+          regStr = "E兑付PC端";
+          break;
+        case "hon_wap":
+          regStr = "E兑付移动端";
+          break;
+        case "synch":
+          regStr = "同步";
+          break;
+        case "ykt":
+          regStr = "电气云课堂";
+          break;
       }
+      return regStr;
     },
-    methods: {
-      //格式化会员的来源
-      formatRegway(column) {
-        let regStr = '';
-        switch (column.regway) {
-          case 'app':
-            regStr = '电圈子APP'
-            break;
-          case 'pc':
-            regStr = '电圈子官网'
-            break;
-          case 'rzb_app':
-            regStr = '认证宝App'
-            break;
-          case 'rzb_wap':
-            regStr = '认证宝移动端'
-            break;
-          case 'rzb_pc':
-            regStr = '认证宝PC端'
-            break;
-          case 'hon_pc':
-            regStr = 'E兑付PC端'
-            break;
-          case 'hon_wap':
-            regStr = 'E兑付移动端'
-            break;
-          case 'synch':
-            regStr = '同步'
-            break;
-          case 'ykt':
-            regStr = '电气云课堂'
-            break;
-        }
-        return regStr;
-      },
-      //格式化企业认证状态
-      formatState(column) {
-        let stateStr = '';
-        switch (column.authstate) {
-          case '1':
-            stateStr = '待审核';
-            break;
-          case '2':
-            stateStr = '未通过';
-            break;
-          case '3':
-            stateStr = '已通过';
-            break;
-          default:
-            stateStr = '未申请';
-            break;
-        }
-        return stateStr;
-      },
-      //查询
-      search() {
-        let identifyReg = /^[D|Q|Z]*\d{0,11}$/;
-        if (this.searchData.identifier) {
-          if (!identifyReg.test(this.searchData.identifier)) {
-            this.$message({
-              message: '请输入正确的电圈号',
-              type: 'error',
-              duration: 1500
-            })
-            return;
-          }
-        }
-        if (this.searchData.phone) {
-          if (!/^\d{1,11}$/.test(this.searchData.phone)) {
-            this.$message({
-              message: '请输入1-11位数字',
-              type: 'error',
-              duration: 1500
-            })
-            return;
-          }
-        }
-        if (Date.parse((this.searchData.starttime)) > Date.parse((this.searchData.endtime))) {
+    //格式化企业认证状态
+    formatState(column) {
+      let stateStr = "";
+      switch (column.authstate) {
+        case "1":
+          stateStr = "待审核";
+          break;
+        case "2":
+          stateStr = "未通过";
+          break;
+        case "3":
+          stateStr = "已通过";
+          break;
+        default:
+          stateStr = "未申请";
+          break;
+      }
+      return stateStr;
+    },
+    //查询
+    search() {
+      let identifyReg = /^[D|Q|Z]*\d{0,11}$/;
+      if (this.searchData.identifier) {
+        if (!identifyReg.test(this.searchData.identifier)) {
           this.$message({
-            message: '开始时间不能大于结束时间',
-            type: 'error',
+            message: "请输入正确的电圈号",
+            type: "error",
             duration: 1500
-          })
+          });
           return;
         }
-        this.isDisabled = true;
-        this.searchData.page = 1;
-        this.getList();
-      },
-      // 导出
-      exportExcel() {
-        this.$refs.hideFrom.submit()
-      },
-      // 查看会员数据
-      look(id) {
-        this.$router.push({
-          path: '/member/view/' + id
-        })
-      },
-      // 启用  禁用
-      toggleLock(arg) {
-        let currentId = arg.id,
-          islock = arg.islock == '0' ? '1' : '0',
-          tipText = arg.islock == '0' ? '确定禁用该会员?' : '确定启用该会员?';
-        this.$confirm(tipText, '提示', {
-            confirmButtonText: '确定',
-            cancelButtonText: '取消',
-            type: 'info'
-          })
-          .then(() => {
-            this.$axios.post('/member/member_lock', {
-                id: currentId,
-                islock: islock
-              })
-              .then((response) => {
-                let res = response.data;
-                if (res.status == 200) {
-                  this.$message({
-                    message: '操作成功!',
-                    duration: 1000,
-                    type: 'success'
-                  });
-                  this.getList();
-                } else {
-                  this.$message({
-                    message: res.msg,
-                    duration: 1000,
-                    type: 'error'
-                  })
-                }
-              })
-              .catch(() => {
-                this.$message({
-                  type: 'error',
-                  message: '网路原因，请稍后重试',
-                  duration: 1000
-                })
-              })
-          })
-          .catch(() => {
-            this.$message({
-              message: '操作取消',
-              duration: 1000
-            })
+      }
+      if (this.searchData.phone) {
+        if (!/^\d{1,11}$/.test(this.searchData.phone)) {
+          this.$message({
+            message: "请输入1-11位数字",
+            type: "error",
+            duration: 1500
           });
-      },
-      // 分页跳转页面
-      handleCurrentChange() {
-        this.getList();
-      },
-      // 请求数据
-      getList() {
-        this.$axios.post('/member/member_list', this.searchData).then(response => {
+          return;
+        }
+      }
+      if (
+        Date.parse(this.searchData.starttime) >
+        Date.parse(this.searchData.endtime)
+      ) {
+        this.$message({
+          message: "开始时间不能大于结束时间",
+          type: "error",
+          duration: 1500
+        });
+        return;
+      }
+      this.isDisabled = true;
+      this.searchData.page = 1;
+      this.getList();
+    },
+    // 导出
+    exportExcel() {
+      this.$refs.hideFrom.submit();
+    },
+    // 查看会员数据
+    look(id) {
+      this.$router.push({
+        path: "/member/view/" + id
+      });
+    },
+    // 启用  禁用
+    toggleLock(arg) {
+      let currentId = arg.id,
+        islock = arg.islock == "0" ? "1" : "0",
+        tipText = arg.islock == "0" ? "确定禁用该会员?" : "确定启用该会员?";
+      this.$confirm(tipText, "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "info"
+      })
+        .then(() => {
+          this.$axios
+            .post("/member/member_lock", {
+              id: currentId,
+              islock: islock
+            })
+            .then(response => {
+              let res = response.data;
+              if (res.status == 200) {
+                this.$message({
+                  message: "操作成功!",
+                  duration: 1000,
+                  type: "success"
+                });
+                this.getList();
+              } else {
+                this.$message({
+                  message: res.msg,
+                  duration: 1000,
+                  type: "error"
+                });
+              }
+            })
+            .catch(() => {
+              this.$message({
+                type: "error",
+                message: "网路原因，请稍后重试",
+                duration: 1000
+              });
+            });
+        })
+        .catch(() => {
+          this.$message({
+            message: "操作取消",
+            duration: 1000
+          });
+        });
+    },
+    // 分页跳转页面
+    handleCurrentChange() {
+      this.getList();
+    },
+    // 请求数据
+    getList() {
+      this.$axios
+        .post("/member/member_list", this.searchData)
+        .then(response => {
           let res = response.data;
           setTimeout(() => {
             this.isDisabled = false;
@@ -384,28 +407,29 @@
             this.$message({
               message: res.msg,
               duration: 1000,
-              type: 'error'
-            })
+              type: "error"
+            });
           }
-        }).catch(() => {
+        })
+        .catch(() => {
           this.isDisabled = false;
           this.$message({
             message: "网络原因,请稍后重试",
             duration: 1000,
-            type: 'error'
-          })
-        })
-      },
-      //下拉框值发生变化
-      changCity(arg) {
-        if (arg == this.cityOptions[0].name) {
-          this.searchData.sign = '1'
-        } else {
-          this.searchData.sign = '0'
-        }
+            type: "error"
+          });
+        });
+    },
+    //下拉框值发生变化
+    changCity(arg) {
+      if (arg == this.cityOptions[0].name) {
+        this.searchData.sign = "1";
+      } else {
+        this.searchData.sign = "0";
       }
     }
   }
+};
 </script>
 
 <style scoped>

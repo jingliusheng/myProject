@@ -66,7 +66,7 @@
         </el-row>
         <el-row type="flex" align="middle">
           <el-col>
-            <span>企业营业执照：</span><img :src="'http://file.jxdqzb.com/'+memberInfo.licensepic" alt="企业营业执照" title="点击可查看" class="thumbImg" @click="imgview($event)">
+            <span>企业营业执照：</span><img :src="memberInfo.licensepic" alt="企业营业执照" title="点击可查看" class="thumbImg" @click="imgview($event)">
           </el-col>
         </el-row>
       </el-row>
@@ -80,110 +80,111 @@
 </template>
 
 <script>
-  import breadcrumb from '../Breadcrumb/breadcrumb'
-  export default {
-    name: 'memberView',
-    data() {
-      return {
-        breadcrumbData: {
-          primary_menu: '会员管理',
-          second_menu: '会员列表',
-          third_menu: '会员详情'
-        },
-        id: '',
-        memberInfo: {},
-        dialogImg: false,
-        imgsrc: ''
-      }
-    },
-    components: {
-      breadcrumb
-    },
-    computed: {
-      regway() {
-        let regStr = '';
-        switch (this.memberInfo.regway) {
-          case 'app':
-            regStr = '电圈子APP'
-            break;
-          case 'pc':
-            regStr = '电圈子官网'
-            break;
-          case 'rzb_app':
-            regStr = '认证宝App'
-            break;
-          case 'rzb_wap':
-            regStr = '认证宝移动端'
-            break;
-          case 'rzb_pc':
-            regStr = '认证宝PC端'
-            break;
-          case 'hon_pc':
-            regStr = 'E兑付PC端'
-            break;
-          case 'hon_wap':
-            regStr = 'E兑付移动端'
-            break;
-          case 'synch':
-            regStr = '同步'
-            break;
-          case 'ykt':
-            regStr = '电气云课堂'
-            break;
-        }
-        return regStr;
+import breadcrumb from "../Breadcrumb/breadcrumb";
+export default {
+  name: "memberView",
+  data() {
+    return {
+      breadcrumbData: {
+        primary_menu: "会员管理",
+        second_menu: "会员列表",
+        third_menu: "会员详情"
       },
-      state() {
-        let stateStr = '';
-        switch (this.memberInfo.authstate) {
-          case '1':
-            stateStr = '待审核';
-            break;
-          case '2':
-            stateStr = '未通过';
-            break;
-          case '3':
-            stateStr = '已通过';
-            break;
-          default:
-            stateStr = '未申请';
-            break;
-        }
-        return stateStr;
+      id: "",
+      memberInfo: {},
+      dialogImg: false,
+      imgsrc: ""
+    };
+  },
+  components: {
+    breadcrumb
+  },
+  computed: {
+    regway() {
+      let regStr = "";
+      switch (this.memberInfo.regway) {
+        case "app":
+          regStr = "电圈子APP";
+          break;
+        case "pc":
+          regStr = "电圈子官网";
+          break;
+        case "rzb_app":
+          regStr = "认证宝App";
+          break;
+        case "rzb_wap":
+          regStr = "认证宝移动端";
+          break;
+        case "rzb_pc":
+          regStr = "认证宝PC端";
+          break;
+        case "hon_pc":
+          regStr = "E兑付PC端";
+          break;
+        case "hon_wap":
+          regStr = "E兑付移动端";
+          break;
+        case "synch":
+          regStr = "同步";
+          break;
+        case "ykt":
+          regStr = "电气云课堂";
+          break;
       }
+      return regStr;
     },
-    created() {
-      this.id = this.$route.params.id;
-      this.$axios.post('/member/member_view', {
-          id: this.id
-        })
-        .then((response) => {
-          let res = response.data;
-          if (res.status == 200) {
-            this.memberInfo = res.content;
-          } else {
-            this.$message({
-              message: res.msg,
-              duration: 1000,
-              type: 'error'
-            })
-          }
-        })
-        .catch(() => {
+    state() {
+      let stateStr = "";
+      switch (this.memberInfo.authstate) {
+        case "1":
+          stateStr = "待审核";
+          break;
+        case "2":
+          stateStr = "未通过";
+          break;
+        case "3":
+          stateStr = "已通过";
+          break;
+        default:
+          stateStr = "未申请";
+          break;
+      }
+      return stateStr;
+    }
+  },
+  created() {
+    this.id = this.$route.params.id;
+    this.$axios
+      .post("/member/member_view", {
+        id: this.id
+      })
+      .then(response => {
+        let res = response.data;
+        if (res.status == 200) {
+          this.memberInfo = res.content;
+        } else {
           this.$message({
-            type: 'info',
-            message: '网络原因,请稍后重试',
-            duration: 1000
+            message: res.msg,
+            duration: 1000,
+            type: "error"
           });
+        }
+      })
+      .catch(() => {
+        this.$message({
+          type: "info",
+          message: "网络原因,请稍后重试",
+          duration: 1000
         });
-    },
-    methods: {
-      imgview(e) {
-        this.imgsrc = e.target.getAttribute('src');
-        this.dialogImg = true
-      }
+      });
+  },
+  methods: {
+    imgview(e) {
+      this.imgsrc = e.target.getAttribute("src");
+      this.dialogImg = true;
     }
   }
+};
 </script>
 
 <style scoped></style>
