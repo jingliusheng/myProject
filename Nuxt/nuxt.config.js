@@ -1,7 +1,7 @@
 module.exports = {
   /*
-  ** Headers of the page
-  */
+   ** Headers of the page
+   */
   head: {
     title: 'nuxtdemo',
     meta: [
@@ -13,18 +13,27 @@ module.exports = {
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
     ]
   },
+  css: ['~assets/css/normailze.css'], //~匹配根目标
   /*
-  ** Customize the progress bar color
-  */
+   ** Customize the progress bar color
+   */
   loading: { color: '#3B8070' },
   /*
-  ** Build configuration
-  */
+   ** Build configuration
+   */
   build: {
+    loaders: [{
+      test: /\.(png|jpe?g|gif|svg)$/,
+      loader: "url-loader",
+      query: {
+        limit: 10000,
+        name: 'img/[name].[hash].[ext]'
+      }
+    }],
     /*
-    ** Run ESLint on save
-    */
-    extend (config, { isDev, isClient }) {
+     ** Run ESLint on save
+     */
+    extend(config, { isDev, isClient }) {
       if (isDev && isClient) {
         config.module.rules.push({
           enforce: 'pre',
