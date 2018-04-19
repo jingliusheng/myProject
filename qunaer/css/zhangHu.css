@@ -1,0 +1,175 @@
+*{margin: 0;padding: 0;}
+a{text-decoration: none;color: #000;}
+li{list-style: none;}
+html{font-size: 625%;}
+
+body{background: #eeeeee;}
+/*页面开始*/
+#outer{
+	width:100%;
+	font-size: 0.12rem;
+	
+}
+/*头部开始*/
+header{
+	width:100%;
+	height:0.43rem;
+	color:#fff;
+	position: fixed;
+	top:0;
+	z-index: 9;
+	background:#1b1a1f;
+	display: box;
+    display: -webkit-box;
+	display: flex;
+	-webkit-box-pack: justify;
+    -webkit-justify-content: space-between;
+	justify-content: space-between;
+	-webkit-box-align: center;
+	-webkit-align-items: center;
+	align-items: center;
+}
+
+header p:nth-child(1){
+	display: box;
+    display: -webkit-box;
+	display: flex;
+	-webkit-box-align: center;
+	-webkit-align-items: center;
+	align-items: center;
+	margin-left: 0.1rem;
+}
+header p:nth-child(1) a{
+	display: box;
+    display: -webkit-box;
+	display: flex;
+	-webkit-box-align: center;
+	-webkit-align-items: center;
+	align-items: center;
+	color:#fff;
+	font-size: 0.15rem;
+}
+header p:nth-child(1) a:nth-child(1){
+	display: flex;
+	margin-right: 0.1rem;
+	}
+header p:nth-child(1) a:nth-child(1) i{
+	width:0.11rem;
+	height:0.2rem;
+	background: url(img/images/1_03.png)no-repeat;
+	background-size: cover;
+	margin-right: 0.05rem;
+}
+
+
+header p:nth-child(2){
+	font-size: 0.16rem;
+	font-weight: 600;
+	margin-right: 0.4rem;
+}
+header >i{
+	width:0.27rem;
+	height:0.08rem;
+	background: url(img/images/1_06.png)no-repeat;
+	background-size: cover;
+	margin-right: 0.1rem;
+}
+
+/*内容部分开始*/
+section{
+	width:100%;
+	margin-top:0.5rem;
+	display: flex;
+	justify-content: center;
+	position: relative;
+}
+#money{
+	width:3.18rem;
+	background: #fff;
+	border:1px solid #ccc;
+}
+/*上半部分*/
+#money .money-top{
+	width:2.94rem;
+	padding:0 0.12rem;
+	height:2rem;
+	font-size: 0.15rem;
+	color:#767676;
+	font-weight: 600;
+	border-bottom: 1px solid #ccc;
+}
+#money .money-top li:nth-child(1){
+	width:100%;
+	text-align: left;
+	margin-top:0.2rem;
+}
+#money .money-top li:nth-child(2){
+	width:100%;
+	text-align: center;
+	margin-top:0.2rem;
+	font-size: 0.35rem;
+}
+#money .money-top li:nth-child(3){
+	width:100%;
+	margin-top:0.25rem;
+	font-size: 0.15rem;
+}
+#money .money-top li:nth-child(3)>span{
+	float:left;
+}
+#money .money-top li:nth-child(3)>a{
+	width:0.8rem;
+	height:0.3rem;
+	float:right;
+	text-align: center;
+	line-height: 0.3rem;
+	border:1px solid #ee7f78;
+	border-radius: 0.03rem;
+	color:#ee7f78;
+}
+#money .money-top li:nth-child(4){
+	clear: both;
+	width:100%;
+	text-align: left;
+	margin-top:0.5rem;
+	font-size: 0.15rem;
+	
+}
+
+/*下半部分开始*/
+#money .money-bottom{
+	width:3.2rem;
+	position: absolute;
+	top:2.22rem;
+	left:0;
+}
+#money .money-bottom li{
+	width:50%;
+	height:0.4rem;
+	float:left;
+	text-align: center;
+	line-height: 0.4rem;
+	font-size: 0.15rem;
+	font-weight: 600;
+	position: relative;
+	color:#ec6b63;
+	background: #fff;
+}
+#money .money-bottom li:nth-child(2){
+	color:#181818;
+}
+#money .money-bottom li:nth-child(2) div{
+	display: none;
+}
+#money .money-bottom .active{
+	border-bottom: 3px solid #ea7b74;
+}
+#money .money-bottom li div{
+	width:3.18rem;
+	position: absolute;
+	color:#666666;
+	top:0.41rem;
+	left:0;
+	background:#fff;
+	border:1px solid #ccc;
+}

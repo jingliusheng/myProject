@@ -1,0 +1,14 @@
+*{margin: 0;padding: 0;}
+a{text-decoration: none;color: #000;}
+li{list-style: none;}
+html{font-size: 625%;}
+
+
+/*页面开始*/
+#outer{
+	width:100%;
+	font-size: 0.12rem;
+	background: #fff;
+}
+
+/*内容部分开始*/
