@@ -1,7 +1,0 @@
-配置域名，端口
-
-package.json 中 添加config配置项
-
-配置初始化css
-
-nuxt.config.js
